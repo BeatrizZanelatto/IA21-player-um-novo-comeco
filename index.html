@@ -41,13 +41,13 @@
             content: " ";
             position: absolute;
             top: calc(50% - .5px);
-            border-top: 1px solid black;
+            border-top: 1px solid red;
             width: 100%;
         }
         
         div.ia21-player div.controllers div.dragbar div.draggable {
             --percent: 0%;
-            background-color: black;
+            background-color: red;
             width: .5rem;
             height: .5rem;
             border-radius: 50%;
@@ -65,7 +65,7 @@
             <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
         </video>
         <div class="controllers">
-            <button class="play-pause" data-deleteme="⏸">
+            <button class="play-pause" data-pause-icon="II" data-play-icon=" ▶">
                 ▶ 
             </button>
             <div class="dragbar timeline">
@@ -89,16 +89,31 @@
             const timeline = container.querySelector(".dragbar.timeline")
             const timelineDrag = timeline.querySelector(".draggable")
             const timer = container.querySelector(".timer")
-            btPlayPause.addEventListener("click", () => video.play())
+            btPlayPause.addEventListener("click", () => {
+                if (video.paused) {
+                    video.play()
+                    btPlayPause.innerText = btPlayPause.dataset.pauseIcon
+                    return
+                }
+                video.pause()
+                btPlayPause.innerText = btPlayPause.dataset.playIcon
+            })
+
+            video.currentTime = 59
 
             video.addEventListener("timeupdate", () => {
                 const percent = (video.currentTime / video.duration) * 100
                 timelineDrag.style.setProperty("--percent", `${percent}%`) 
                 timer.innerText = Math.floor(video.currentTime)
-            })
+                if (timer.innerText >= 60) {
+                    min = Math.floor(timer.innerText/60)
+                    seg = Math.floor(timer.innerText%60)
+                    timer.innerText = min + ":" + seg
+
+            }
         })
+        
+    })
     </script>
 </body>
 </html>
-
-1:61
