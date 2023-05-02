@@ -27,7 +27,9 @@
             display: flex;
             border-top: 3px solid black;
             column-gap: 10px;
+            padding-right: 1em;
             border-radius: 0px 0px 5px 5px;
+            background-color: white;
         }
 
         div.ia21-player div.controllers button.play-pause {
@@ -64,23 +66,32 @@
         }
 
         body {
-                font-family: sans-serif;
-                font-size: 38px;
-                color: black;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin: 0;
-                width: 100vw;
-                height: 100vh;
-                background: radial-gradient(circle at 10% 20%, rgba(216, 75, 212, 0.4) 30.2%, rgba(100, 231, 204, 0.73) 62%, rgba(100, 231, 204, 0.73) 83.4%);
-                
-}
+            font-family: sans-serif;
+            font-size: 28px;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 10% 20%, rgba(216, 75, 212, 0.4) 30.2%, rgba(100, 231, 204, 0.73) 62%, rgba(100, 231, 204, 0.73) 83.4%);
 
-h1 {
-  margin: 20px;
-}
+        }
 
+        h1 {
+            margin: 20px;
+        }
+
+        div.ia21-player div.controllers div.dragbar.timeline {
+            width: 30%;
+        }
+
+        div.ia21-player div.controllers div.timer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 
 
@@ -103,6 +114,7 @@ h1 {
             <div class="timer">
                 00:00:00
             </div>
+            🔊
             <div class="dragbar volume">
                 <div class="draggable"></div>
             </div>
@@ -133,15 +145,16 @@ h1 {
 
             video.addEventListener("timeupdate", () => {
                 const percent = (video.currentTime / video.duration) * 100
+                const s = Math.floor(video.currentTime)
+                const m = Math.floor(s / 60)
+                const h = Math.floor(m / 60)
+                const sh = `${h % 60}`.padStart(2, "0")
+                const sm = `${m % 60}`.padStart(2, "0")
+                const ss = `${s % 60}`.padStart(2, "0")
                 timelineDrag.style.setProperty("--percent", `${percent}%`)
-                timer.innerText = Math.floor(video.currentTime)
-
-                if (timer.innerText >= 60) {
-                    min = Math.floor(timer.innerText / 60)
-                    seg = Math.floor(timer.innerText % 60)
-                    timer.innerText = min + ":" + seg
-                }
+                timer.innerText = `${sh}:${sm}:${ss}`
             })
+
 
             const dragbars = container.querySelectorAll(".dragbar")
 
@@ -200,7 +213,7 @@ h1 {
         })
     </script>
 
-    
+
 </body>
 
 </html>
